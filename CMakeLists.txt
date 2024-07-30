@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(isaac_ros_launch)
+project(isaac_orbbec_launch)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -9,4 +9,6 @@ endif()
 find_package(ament_cmake REQUIRED)
 # install the launch files
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY rviz DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
 ament_package()
