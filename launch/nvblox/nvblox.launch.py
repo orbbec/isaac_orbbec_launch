@@ -52,7 +52,7 @@ def generate_launch_description():
         LaunchConfiguration('setup_for_orbbec', default='False'))
     setup_for_zed = IfCondition(
         LaunchConfiguration('setup_for_zed', default='False'))
-    
+
     # Option to attach the nodes to a shared component container for speed ups through intra process communication.
     # Make sure to set the 'component_container_name' to the name of the component container you want to attach to.
     attach_to_shared_component_container_arg = LaunchConfiguration('attach_to_shared_component_container', default=False)
@@ -66,14 +66,14 @@ def generate_launch_description():
         output='screen',
         condition=UnlessCondition(attach_to_shared_component_container_arg)
     )
-    
+
     load_composable_nodes = LoadComposableNodes(
         target_container=component_container_name_arg,
         composable_node_descriptions=[
             ComposableNode(
             name='nvblox_node',
             package='nvblox_ros',
-            plugin='nvblox::NvbloxNode')])
+            plugin='nvblox::NvbloxNode',)])
 
     group_action = GroupAction([
 
@@ -91,19 +91,31 @@ def generate_launch_description():
                      value=LaunchConfiguration('global_frame', default='odom')),
 
         # Remappings for realsense data
-        SetRemap(src=['depth/image'],
+        # SetRemap(src=['depth/image'],
+        #          dst=['/camera/orbbec_camera_splitter_node/output/depth'],
+                #  condition=setup_for_orbbec),
+        # SetRemap(src=['depth/camera_info'],
+        #          dst=['/camera/depth/camera_info'],
+        #          condition=setup_for_orbbec),
+        # SetRemap(src=['color/image'],
+        #          dst=['/camera/color/image_raw'],
+        #          condition=setup_for_orbbec),
+        # SetRemap(src=['color/camera_info'],
+        #          dst=['/camera/color/camera_info'],
+        #          condition=setup_for_orbbec),
+
+        SetRemap(src=['camera_0/depth/image'],
                  dst=['/camera/orbbec_camera_splitter_node/output/depth'],
                  condition=setup_for_orbbec),
-        SetRemap(src=['depth/camera_info'],
-                 dst=['/camera/depth/camera_info'],
-                 condition=setup_for_orbbec),
-        SetRemap(src=['color/image'],
-                 dst=['/camera/color/image_raw'],
-                 condition=setup_for_orbbec),
-        SetRemap(src=['color/camera_info'],
+        SetRemap(src=['camera_0/depth/camera_info'],
                  dst=['/camera/color/camera_info'],
                  condition=setup_for_orbbec),
-
+        SetRemap(src=['camera_0/color/image'],
+                 dst=['/camera/color/image_raw'],
+                 condition=setup_for_orbbec),
+        SetRemap(src=['camera_0/color/camera_info'],
+                 dst=['/camera/color/camera_info'],
+                 condition=setup_for_orbbec),
         # Remappings for zed
 	    SetRemap(src=['depth/image'],
                  dst=['/zed2/zed_node/depth/depth_registered'],
@@ -137,6 +149,8 @@ def generate_launch_description():
         SetRemap(src=['pointcloud'],
                  dst=['/point_cloud'],
                  condition=setup_for_isaac_sim),
+
+
 
         # Include the node container
         load_composable_nodes

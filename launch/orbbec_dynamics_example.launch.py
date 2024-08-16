@@ -16,20 +16,29 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
-
+from isaac_ros_launch_utils.all_types import *
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
+import isaac_ros_launch_utils as lu
 from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
-
+from nvblox_ros_python_utils.nvblox_launch_utils import NvbloxMode, NvbloxCamera, NvbloxPeopleSegmentation
+from nvblox_ros_python_utils.nvblox_constants import SEMSEGNET_INPUT_IMAGE_WIDTH, \
+    SEMSEGNET_INPUT_IMAGE_HEIGHT, NVBLOX_CONTAINER_NAME
 
 def generate_launch_description():
 
     bringup_dir = get_package_share_directory('isaac_orbbec_launch')
-
+    args = lu.ArgumentContainer()
+    args.add_arg(
+        'mode',
+        default=NvbloxMode.static,
+        choices=NvbloxMode.names(),
+        description='The nvblox mode.',
+        cli=True)
     # Launch Arguments
     run_rviz_arg = DeclareLaunchArgument(
         'run_rviz', default_value='True',
@@ -46,7 +55,7 @@ def generate_launch_description():
     global_frame = LaunchConfiguration('global_frame',
                                        default='odom')
 
-    # Create a shared container to hold composable nodes 
+    # Create a shared container to hold composable nodes
     # for speed ups through intra process communication.
     shared_container_name = "shared_nvblox_container"
     shared_container = Node(
@@ -68,11 +77,12 @@ def generate_launch_description():
     vslam_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             bringup_dir, 'launch', 'perception', 'vslam.launch.py')]),
-        launch_arguments={'output_odom_frame_name': global_frame, 
+        launch_arguments={'output_odom_frame_name': global_frame,
                           'setup_for_orbbec': 'True',
                           'run_odometry_flattening': LaunchConfiguration('flatten_odometry_to_2d'),
                           'attach_to_shared_component_container': 'True',
-                          'component_container_name': shared_container_name}.items())
+                          'component_container_name': shared_container_name}.items()
+                          )
 
     # Nvblox
     nvblox_launch = IncludeLaunchDescription(
@@ -82,6 +92,9 @@ def generate_launch_description():
                           'setup_for_dynamics': 'True',
                           'setup_for_orbbec': 'True',
                           'attach_to_shared_component_container': 'True',
+                        #   'container_name': NVBLOX_CONTAINER_NAME,
+                        #   'mode': args.mode,
+                        #   'camera': '1',
                           'component_container_name': shared_container_name}.items())
 
     # Ros2 bag

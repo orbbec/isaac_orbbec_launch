@@ -76,10 +76,10 @@ def generate_launch_description():
                     'calibration_frequency': 200.0,
                     'img_jitter_threshold_ms': 33.00
                     }],
-        remappings=[('stereo_camera/left/image', '/camera/left_ir/image_raw'),
-                    ('stereo_camera/left/camera_info', '/camera/left_ir/camera_info'),
-                    ('stereo_camera/right/image', '/camera/right_ir/image_raw'),
-                    ('stereo_camera/right/camera_info', '/camera/right_ir/camera_info'),
+        remappings=[('visual_slam/image_0', '/camera/left_ir/image_raw'),
+                    ('visual_slam/camera_info_0', '/camera/left_ir/camera_info'),
+                    ('visual_slam/image_1', '/camera/right_ir/image_raw'),
+                    ('visual_slam/camera_info_1', '/camera/right_ir/camera_info'),
                     ('visual_slam/imu', '/camera/gyro_accel/sample')]
     )
 
