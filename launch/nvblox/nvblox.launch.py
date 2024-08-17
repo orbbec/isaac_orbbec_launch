@@ -108,7 +108,7 @@ def generate_launch_description():
                  dst=['/camera/orbbec_camera_splitter_node/output/depth'],
                  condition=setup_for_orbbec),
         SetRemap(src=['camera_0/depth/camera_info'],
-                 dst=['/camera/color/camera_info'],
+                 dst=['/camera/depth/camera_info'],
                  condition=setup_for_orbbec),
         SetRemap(src=['camera_0/color/image'],
                  dst=['/camera/color/image_raw'],
