@@ -29,7 +29,7 @@ from launch_ros.descriptions import ComposableNode
 
 def generate_launch_description():
 
-    bringup_dir = get_package_share_directory('nvblox_examples_bringup')
+    bringup_dir = get_package_share_directory('isaac_orbbec_launch')
     base_config_dir = os.path.join(bringup_dir, 'config', 'nvblox')
     specialization_dir = os.path.join(base_config_dir, 'specializations')
 
