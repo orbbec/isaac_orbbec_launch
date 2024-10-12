@@ -21,7 +21,7 @@ enable_color: true
 color_width: 640
 color_height: 480
 color_fps: 60
-color_format: "YUYV"
+color_format: "RGB"
 enable_color_auto_exposure: false
 color_exposure: 50 # 5ms
 color_gain: -1 # -1 default
