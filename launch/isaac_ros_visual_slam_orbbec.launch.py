@@ -28,6 +28,7 @@ def generate_launch_description():
         executable="orbbec_camera_node",
         namespace='camera',
         parameters=[{
+                'camera_name': 'camera',
                 'enable_ir_auto_exposure' : False,
                 'ir_exposure' : 5000,
                 'ir_gain' : 24,
