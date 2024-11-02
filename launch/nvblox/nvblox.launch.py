@@ -90,22 +90,8 @@ def generate_launch_description():
         SetParameter(name='global_frame',
                      value=LaunchConfiguration('global_frame', default='odom')),
 
-        # Remappings for realsense data
-        # SetRemap(src=['depth/image'],
-        #          dst=['/camera/orbbec_camera_splitter_node/output/depth'],
-                #  condition=setup_for_orbbec),
-        # SetRemap(src=['depth/camera_info'],
-        #          dst=['/camera/depth/camera_info'],
-        #          condition=setup_for_orbbec),
-        # SetRemap(src=['color/image'],
-        #          dst=['/camera/color/image_raw'],
-        #          condition=setup_for_orbbec),
-        # SetRemap(src=['color/camera_info'],
-        #          dst=['/camera/color/camera_info'],
-        #          condition=setup_for_orbbec),
-
         SetRemap(src=['camera_0/depth/image'],
-                 dst=['/camera/orbbec_camera_splitter_node/output/depth'],
+                 dst=['/camera/orbbec_camera_node/output/depth'],
                  condition=setup_for_orbbec),
         SetRemap(src=['camera_0/depth/camera_info'],
                  dst=['/camera/depth/camera_info'],
@@ -117,7 +103,7 @@ def generate_launch_description():
                  dst=['/camera/color/camera_info'],
                  condition=setup_for_orbbec),
         # Remappings for zed
-	    SetRemap(src=['depth/image'],
+	      SetRemap(src=['depth/image'],
                  dst=['/zed2/zed_node/depth/depth_registered'],
                  condition=setup_for_zed),
         SetRemap(src=['depth/camera_info'],

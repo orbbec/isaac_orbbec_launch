@@ -56,28 +56,47 @@ def generate_launch_description():
         target_container=component_container_name_arg,
         composable_node_descriptions=[
             # RealSense splitter node
+            # ComposableNode(
+            #     namespace="camera",
+            #     name='orbbec_camera_splitter_node',
+            #     package='orbbec_camera_splitter',
+            #     plugin='nvblox::OrbbecCameraSplitterNode',
+            #     parameters=[{
+            #         'input_qos': 'DEFAULT',
+            #         'output_qos': 'SENSOR_DATA',
+            #     }],
+            #     remappings=[('input/infra_1', '/camera/left_ir/image_raw'),
+            #                 ('input/infra_1_metadata', '/camera/left_ir/metadata'),
+            #                 ('input/infra_2', '/camera/right_ir/image_raw'),
+            #                 ('input/infra_2_metadata', '/camera/right_ir/metadata'),
+            #                 ('input/depth', '/camera/depth/image_raw'),
+            #                 ('input/depth_metadata', '/camera/depth/metadata'),
+            #                 ('input/pointcloud', '/camera/depth_registered/points'),
+            #                 ('input/pointcloud_metadata',
+            #                  '/camera/depth/metadata'),
+            #                 ]),
             ComposableNode(
-                namespace="camera",
-                name='orbbec_camera_splitter_node',
-                package='orbbec_camera_splitter',
-                plugin='nvblox::OrbbecCameraSplitterNode',
-                parameters=[{
-                    'input_qos': 'DEFAULT',
-                    'output_qos': 'SENSOR_DATA',
-                }],
-                remappings=[('input/infra_1', '/camera/left_ir/image_raw'),
-                            ('input/infra_1_metadata', '/camera/left_ir/metadata'),
-                            ('input/infra_2', '/camera/right_ir/image_raw'),
-                            ('input/infra_2_metadata', '/camera/right_ir/metadata'),
-                            ('input/depth', '/camera/depth/image_raw'),
-                            ('input/depth_metadata', '/camera/depth/metadata'),
-                            ('input/pointcloud', '/camera/depth_registered/points'),
-                            ('input/pointcloud_metadata',
-                             '/camera/depth/metadata'),
-                            ]),])
+              namespace="camera",
+              # name='orbbec_camera_splitter_node',
+              name='orbbec_camera_node',
+              package='orbbec_camera',
+              plugin='orbbec_camera::OBCameraNodeDriver',
+              parameters=[
+                  config_file
+                ],
+              remappings=[
+                          ('/camera/left_ir/image_raw', '~/output/infra_1'),
+                          ('/camera/right_ir/image_raw', '~/output/infra_2'),
+                          ('/camera/depth/image_raw', '~/output/depth'),
+                          ('/camera/depth_registered/points', '~/output/pointcloud'),
+                      ]),
+            ]
+        )
+
     orbbec_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([orbbec_camera_launch_file]),
         launch_arguments={'config_file_path': config_file}.items())
-    
 
-    return LaunchDescription([orbbec_container, load_composable_nodes, orbbec_launch])
+
+    # return LaunchDescription([orbbec_container, load_composable_nodes, orbbec_launch])
+    return LaunchDescription([orbbec_container, load_composable_nodes])

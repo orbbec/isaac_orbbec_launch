@@ -137,20 +137,6 @@ def generate_launch_description():
                  dst=['/front/stereo_camera/right/rgb'],
                  condition=setup_for_isaac_sim),
 
-        # Remappings for Realsense
-        # SetRemap(src=['/stereo_camera/left/camera_info'],
-        #          dst=['/camera/left_ir/camera_info'],
-        #          condition=setup_for_orbbec),
-        # SetRemap(src=['/stereo_camera/right/camera_info'],
-        #          dst=['/camera/right_ir/camera_info'],
-        #          condition=setup_for_orbbec),
-        # SetRemap(src=['/stereo_camera/left/image'],
-        #          dst=['/camera/orbbec_camera_splitter_node/output/infra_1'],
-        #          condition=setup_for_orbbec),
-        # SetRemap(src=['/stereo_camera/right/image'],
-        #          dst=['/camera/orbbec_camera_splitter_node/output/infra_2'],
-        #          condition=setup_for_orbbec),
-
         SetRemap(src=['visual_slam/camera_info_0'],
                  dst=['/camera/left_ir/camera_info'],
                  condition=setup_for_orbbec),
@@ -158,12 +144,12 @@ def generate_launch_description():
                  dst=['/camera/right_ir/camera_info'],
                  condition=setup_for_orbbec),
         SetRemap(src=['visual_slam/image_0'],
-                 dst=['/camera/orbbec_camera_splitter_node/output/infra_1'],
+                 dst=['/camera/orbbec_camera_node/output/infra_1'],
                  condition=setup_for_orbbec),
         SetRemap(src=['visual_slam/image_1'],
-                 dst=['/camera/orbbec_camera_splitter_node/output/infra_2'],
+                 dst=['/camera/orbbec_camera_node/output/infra_2'],
                  condition=setup_for_orbbec),
-                 
+
         #################################################
         ######### ODOMETRY FLATTENER NODE SETUP #########
         #################################################
